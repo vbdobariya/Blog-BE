@@ -19,8 +19,13 @@ mongoose.connection.on("connection", () => {
   console.log("connect");
 });
 
-app.use("/", loginRoute);
+app.use("/api", loginRoute);
 app.use("/api/blogs", blogRoutes);
 
-const PORT = process.env.PORT || 5005;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+app.use("/", (req, res) => {
+  res.send("Server is running.");
+});
+
+
+app.listen(5000, () => console.log(`Server running on port ${PORT}`));
