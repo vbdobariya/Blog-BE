@@ -1,4 +1,5 @@
 const express = require("express");
+const http = require('http');
 const mongoose = require("mongoose");
 const loginRoute = require("./routes/loginRoute");
 const blogRoutes = require("./routes/blogRoutes");
@@ -27,5 +28,5 @@ app.use("/", (req, res) => {
   res.send("Server is running.");
 });
 
-
-app.listen(5000, () => console.log(`Server running on port ${5000}`));
+const server = http.createServer(app);
+server.listen(5000,()=>{console.log('this app is running on '+5000)});
