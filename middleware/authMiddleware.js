@@ -15,7 +15,6 @@ const isAuth = (req, res, next) => {
     res.status(401).json({ message: "Invalid token" });
   }
 };
-
 // Admin Auth
 const isAdmin = async (req, res, next) => {
   if (req.user.role !== "admin") {
