@@ -29,4 +29,4 @@ app.use("/", (req, res) => {
 });
 
 const server = http.createServer(app);
-server.listen(5000,()=>{console.log('this app is running on '+5000)});
+server.listen(5000, () => { console.log('this app is running on ' + 5000) });

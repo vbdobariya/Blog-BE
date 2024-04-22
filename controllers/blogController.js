@@ -1,5 +1,6 @@
 const Blog = require("../models/Blog");
 
+// Get a all blog
 exports.getAllBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find();
@@ -10,7 +11,7 @@ exports.getAllBlogs = async (req, res) => {
   }
 };
 
-// Get a blog by ID
+// Get a blog
 exports.getBlogById = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id).populate(
@@ -56,7 +57,7 @@ exports.createBlog = async (req, res) => {
   }
 };
 
-// Update a blog by ID
+// Update a blog
 exports.updateBlog = async (req, res) => {
   try {
     const { title, description, imageUrl, videoUrl, gifUrl } = req.body;
@@ -75,7 +76,7 @@ exports.updateBlog = async (req, res) => {
   }
 };
 
-// Delete a blog by ID
+// Delete a blog
 exports.deleteBlog = async (req, res) => {
   try {
     const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
