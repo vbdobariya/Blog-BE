@@ -51,9 +51,10 @@ exports.createBlog = async (req, res) => {
       imageUrl,
       videoUrl,
       gifUrl,
-      author: req.user._id,
-      authorname: req.user.username
+      author: req?.user?._id,
+      authorname: req?.user?.username
     });
+
     res.status(201).send({
       message: "Blog created successfully",
       success: true,
