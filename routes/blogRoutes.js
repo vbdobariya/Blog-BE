@@ -9,4 +9,7 @@ router.post("/", isAuth, blogController.createBlog);
 router.put("/:id", isAuth, blogController.updateBlog);
 router.delete("/:id", isAuth, blogController.deleteBlog);
 
+router.put("/:id/comment", isAuth, blogController.blogCommentController);
+router.put("/:id/like", isAuth, blogController.blogLikeController);
+
 module.exports = router;

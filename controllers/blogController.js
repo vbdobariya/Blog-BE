@@ -4,6 +4,11 @@ const Blog = require("../models/Blog");
 exports.getAllBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find();
+
+    blogs.sort((a, b) => {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
     res.json(blogs);
   } catch (err) {
     console.error(err);
@@ -39,13 +44,15 @@ exports.createBlog = async (req, res) => {
         success: false,
       });
     }
+
     await Blog.create({
       title,
       description,
       imageUrl,
       videoUrl,
       gifUrl,
-      author: req.userId,
+      author: req.user._id,
+      authorname: req.user.username
     });
     res.status(201).send({
       message: "Blog created successfully",
@@ -89,3 +96,98 @@ exports.deleteBlog = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+exports.blogCommentController = async (req, res) => {
+  try {
+    const { comment } = req.body;
+
+    if (!comment) {
+      return res.status(201).json({ success: false, message: "No comments yet." });
+    }
+
+    const blog = await Blog.findById(req.params.id);
+
+    const review = {
+      username: req.user.username,
+      comment,
+      user: req.user._id,
+    };
+
+    blog.comment.push(review);
+
+    await blog.save();
+
+    res.status(201).send({
+      success: true,
+      message: "Comment Added!",
+    });
+  } catch (error) {
+    console.log(error);
+    if (error.name === "CastError") {
+      return res.status(500).send({
+        success: false,
+        message: "Invalid Id",
+      });
+    }
+    res.status(500).send({
+      success: false,
+      message: "Error In Comment API",
+      error,
+    });
+  }
+};
+
+exports.blogLikeController = async (req, res) => {
+  try {
+    const { like } = req.body;
+
+    if (like === undefined || like === null) {
+      return res.status(201).json({ success: false, message: "No comments yet." });
+    }
+
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    if (like === true) {
+      const likes = {
+        username: req.user.username,
+        user: req.user._id,
+      };
+
+      blog.likesUser.push(likes);
+      blog.likes += 1;
+    }
+
+    if (like === false) {
+      const existingLikeIndex = blog.likesUser.findIndex(like => like.user.toString() === req.user._id.toString());
+      blog.likesUser.splice(existingLikeIndex, 1);
+      if (blog.likes !== 0) {
+        blog.likes -= 1;
+      }
+    }
+
+
+    await blog.save();
+
+    res.status(201).send({
+      success: true,
+      message: "Blog liked successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    if (error.name === "CastError") {
+      return res.status(500).send({
+        success: false,
+        message: "Invalid Id",
+      });
+    }
+    res.status(500).send({
+      success: false,
+      message: "Error In Comment API",
+      error,
+    });
+  }
+};
+
