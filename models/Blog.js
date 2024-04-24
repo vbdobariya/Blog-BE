@@ -42,8 +42,8 @@ const blogSchema = new mongoose.Schema({
   comment: [commentSchema],
   likes: { type: Number, default: 0 },
   likesUser: [likeSchema],
-  author: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  authorname: { type: mongoose.Schema.Types.String, ref: "User", required: true },
+  author: { type: mongoose.Schema.Types.ObjectId, enun: ["user", "admin"], required: true },
+  authorname: { type: mongoose.Schema.Types.String, enun: ["user", "admin"], required: true },
 },
   { timestamps: true }
 );
