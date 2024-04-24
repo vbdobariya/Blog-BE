@@ -9,7 +9,7 @@ const isAuth = async (req, res, next) => {
   }
   try {
     const decodeData = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decodeData._id);
+    req.user = await User.findById(decodeData._id ?? decodeData.userId);
     next();
   } catch (err) {
     console.error(err);
